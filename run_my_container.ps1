@@ -1,21 +1,21 @@
-Set-Variable FIBO_NUMBER -Option Constant -Force -Value "FIBO_NUMBER"
+Set-Variable -Name FIBO_NUMBER -Option Constant -Value 20
 $DockerHelperImageTag = "dockerhelperimage"
 $ComputerName = $env:computername
 $ContainerName = "dockerhelpercontainer"
-Write-Host $DockerHelperImageTag
+
 Function Get-ContainerRun {
     param(
         [Parameter(Mandatory)]
         [INT] $FIBO_NUMBER
     )
-    Write-Host $FIBO_NUMBER
-    docker images
-    if($FIBO_NUMBER) {
-        $containerID = docker run -it -e FIBO_NUMBER=$FIBO_NUMBER --hostname $ComputerName --name $containerName $DockerHelperImageTag
+    Write-Host "Fibonacci Number: $FIBO_NUMBER"
+    if ($FIBO_NUMBER) {
+        $containerID = docker run -it -e FIBO_NUMBER=$FIBO_NUMBER --hostname $ComputerName --name $ContainerName $DockerHelperImageTag
     } else {
-        $containerID = docker run -it --hostname $ComputerName --name $containerName $DockerHelperImageTag
+        $containerID = docker run -it --hostname $ComputerName --name $ContainerName $DockerHelperImageTag
     }
-    $containerID
+    Write-Host "Container ID: $containerID"
     docker ps -a
 }
-Get-ContainerRun
+
+Get-ContainerRun -FIBO_NUMBER $FIBO_NUMBER
