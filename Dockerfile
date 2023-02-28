@@ -1,16 +1,16 @@
-#
-# DockerHelper Dockerfile
-#
-# Pull base image
-FROM stefanscherer/node-windows:10-windowsservercore 
-LABEL maintainer="Pooja Patel <pooja.php30@gmail.com>" 
-# copy directories from local to $ComputerName local $Destination directory
-COPY Fibonacci.ps1 c:/data/
-# Define mountable directories
-VOLUME [ "c:/data" ]
+# Use official Node.js image
+FROM node:10-alpine
+
+LABEL maintainer="Pooja Patel <pooja.php30@gmail.com>"
+
+# Copy the PowerShell script to the container
+COPY Fibonacci.ps1 /app/
+
 # Define working directory
-WORKDIR c:/data/
-# Run the PowerShell commands
-SHELL ["pwsh", "-Command"]
-# set the $env in the powershell script
-CMD .\Fibonacci.ps1 "$env:FIBO_NUMBER"
+WORKDIR /app
+
+# Define an environment variable for the Fibonacci number
+ENV FIBO_NUMBER
+
+# Run the PowerShell script
+CMD ["pwsh", "-Command", "./Fibonacci.ps1 $env:FIBO_NUMBER"]
